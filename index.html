@@ -1,26 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jungle Monkey Runner</title>
+  <meta charset="UTF-8">
+  <title>Monkey Banana Game</title>
   <style>
-    body { margin: 0; padding: 0; background: #87ceeb; font-family: sans-serif; }
-    canvas { display: block; margin: 0 auto; background: #8b4513; }
-    .controls, .leaderboard { text-align: center; margin-top: 10px; }
+    body {
+      text-align: center;
+      background: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+    canvas {
+      border: 2px solid #444;
+      display: block;
+      margin: 20px auto;
+      background-color: #ffffff;
+    }
+    input, button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
-  <div class="controls">
-    <input id="playerName" placeholder="Enter your name" />
-    <button onclick="startGame()">Start Game</button>
-  </div>
-  <canvas id="gameCanvas" width="600" height="300"></canvas>
-  <div class="leaderboard">
-    <p id="score">Score: 0</p>
-    <h3>Leaderboard</h3>
-    <ul id="leaderboardList"></ul>
-  </div>
+  <h1>Monkey Banana Game</h1>
+  <input id="playerName" type="text" placeholder="Enter your name" />
+  <button onclick="startGame()">Start Game</button>
+  <p id="score">Score: 0</p>
+  <canvas id="gameCanvas" width="600" height="400"></canvas>
+  <h2>Leaderboard</h2>
+  <ol id="leaderboardList"></ol>
 
   <script src="game.js"></script>
 </body>
