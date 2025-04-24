@@ -5,10 +5,13 @@ let score = 0, running = false, playerName = '';
 let snakes = [], bananas = [], highScores = [];
 let lastTime = 0, lastSnakeTime = 0, lastBananaTime = 0;
 
+// Base64 Image Data for Monkey (pixelated)
 const monkeyImg = new Image();
-monkeyImg.src = 'https://path-to-your-pixel-monkey-image.png'; // Replace with your actual pixel monkey image URL
+monkeyImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAAC6YdY1AAAAL0lEQVR42mP8/wcAAwAB/2s5k48AAAAASUVORK5CYII='; // Placeholder (replace with pixel art)
+
+// Base64 Image Data for Banana (pixelated)
 const bananaImg = new Image();
-bananaImg.src = 'https://path-to-your-banana-image.png'; // Replace with your actual banana image URL
+bananaImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAAC6YdY1AAAAL0lEQVR42mP8/wcAAwAB/2s5k48AAAAASUVORK5CYII='; // Placeholder (replace with pixel art)
 
 // Event listeners for jumping
 document.addEventListener('keydown', () => velocity = jump);
