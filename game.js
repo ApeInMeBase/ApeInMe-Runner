@@ -7,15 +7,15 @@ let lastTime = 0, lastSnakeTime = 0, lastBananaTime = 0;
 
 // Base64 Image Data for Monkey (pixelated)
 const monkeyImg = new Image();
-monkeyImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...'; // Base64 pixel image for Monkey (replace with actual data)
+monkeyImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...'; // Replace with actual base64 data
 
 // Base64 Image Data for Banana (pixelated)
 const bananaImg = new Image();
-bananaImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...'; // Base64 pixel image for Banana (replace with actual data)
+bananaImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...'; // Replace with actual base64 data
 
 // Base64 Image Data for Jungle Background
 const backgroundImg = new Image();
-backgroundImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...'; // Base64 pixel image for Background (replace with actual data)
+backgroundImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...'; // Replace with actual base64 data
 
 // Event listeners for jumping
 document.addEventListener('keydown', () => velocity = jump);
