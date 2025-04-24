@@ -1,47 +1,26 @@
-// Game setup
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
+
 let monkeyY = 150, velocity = 0, gravity = 0.6, jump = -12;
 let score = 0, running = false, playerName = '';
 let snakes = [], bananas = [], highScores = [];
 let lastTime = 0, lastSnakeTime = 0, lastBananaTime = 0;
 
-// Image assets (not base64)
+// Load images from local files
 const monkeyImg = new Image();
-monkeyImg.src = './assets/monkey.png';
+monkeyImg.src = 'images/monkey.png';
 
 const bananaImg = new Image();
-bananaImg.src = './assets/banana.png';
+bananaImg.src = 'images/banana.png';
 
 const backgroundImg = new Image();
-backgroundImg.src = './assets/background.jpg';
+backgroundImg.src = 'images/jungle.png';
 
-// Load leaderboard from localStorage and reset daily
-function loadLeaderboard() {
-  const data = localStorage.getItem('monkeyLeaderboard');
-  if (data) {
-    const parsed = JSON.parse(data);
-    const now = new Date().getTime();
-    if (now - parsed.timestamp < 86400000) { // 24 hours
-      highScores = parsed.scores;
-    } else {
-      highScores = [];
-    }
-  }
-}
-
-function saveLeaderboard() {
-  localStorage.setItem('monkeyLeaderboard', JSON.stringify({
-    timestamp: new Date().getTime(),
-    scores: highScores
-  }));
-}
-
-// Event listeners for jumping
 document.addEventListener('keydown', () => velocity = jump);
 canvas.addEventListener('click', () => velocity = jump);
 
 function startGame() {
+  checkResetScores();
   score = 0;
   monkeyY = 150;
   velocity = 0;
@@ -51,7 +30,6 @@ function startGame() {
   lastSnakeTime = 0;
   lastBananaTime = 0;
   playerName = document.getElementById('playerName').value || 'Anon';
-  loadLeaderboard();
   requestAnimationFrame(gameLoop);
 }
 
@@ -97,9 +75,7 @@ function gameLoop(timestamp) {
   for (let snake of snakes) {
     if (50 < snake.x + snake.width && 80 > snake.x && monkeyY + 30 > canvas.height - snake.height - 50) {
       running = false;
-      highScores.push({ name: playerName, score });
-      highScores = highScores.sort((a, b) => b.score - a.score).slice(0, 10);
-      saveLeaderboard();
+      saveScore();
       updateLeaderboard();
       return;
     }
@@ -119,12 +95,40 @@ function gameLoop(timestamp) {
   requestAnimationFrame(gameLoop);
 }
 
+function saveScore() {
+  let saved = JSON.parse(localStorage.getItem('highScores')) || [];
+  let existing = saved.find(e => e.name === playerName);
+  if (!existing || score > existing.score) {
+    saved = saved.filter(e => e.name !== playerName);
+    saved.push({ name: playerName, score });
+  }
+  localStorage.setItem('highScores', JSON.stringify(saved));
+  localStorage.setItem('lastReset', Date.now().toString());
+}
+
 function updateLeaderboard() {
+  let saved = JSON.parse(localStorage.getItem('highScores')) || [];
+  saved.sort((a, b) => b.score - a.score);
   const list = document.getElementById('leaderboardList');
   list.innerHTML = '';
-  highScores.forEach(entry => {
+  saved.slice(0, 10).forEach(entry => {
     const li = document.createElement('li');
     li.textContent = `${entry.name}: ${entry.score}`;
     list.appendChild(li);
   });
 }
+
+function checkResetScores() {
+  const lastReset = parseInt(localStorage.getItem('lastReset'), 10) || 0;
+  const now = Date.now();
+  const oneDay = 24 * 60 * 60 * 1000;
+  if (now - lastReset > oneDay) {
+    localStorage.removeItem('highScores');
+    localStorage.setItem('lastReset', now.toString());
+  }
+  updateLeaderboard();
+}
+
+window.onload = () => {
+  checkResetScores();
+};
