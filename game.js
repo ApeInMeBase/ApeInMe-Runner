@@ -7,11 +7,15 @@ let lastTime = 0, lastSnakeTime = 0, lastBananaTime = 0;
 
 // Base64 Image Data for Monkey (pixelated)
 const monkeyImg = new Image();
-monkeyImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAAC6YdY1AAAAL0lEQVR42mP8/wcAAwAB/2s5k48AAAAASUVORK5CYII='; // Placeholder (replace with pixel art)
+monkeyImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...'; // Base64 pixel image for Monkey (replace with actual data)
 
 // Base64 Image Data for Banana (pixelated)
 const bananaImg = new Image();
-bananaImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAAC6YdY1AAAAL0lEQVR42mP8/wcAAwAB/2s5k48AAAAASUVORK5CYII='; // Placeholder (replace with pixel art)
+bananaImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...'; // Base64 pixel image for Banana (replace with actual data)
+
+// Base64 Image Data for Jungle Background
+const backgroundImg = new Image();
+backgroundImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...'; // Base64 pixel image for Background (replace with actual data)
 
 // Event listeners for jumping
 document.addEventListener('keydown', () => velocity = jump);
@@ -36,8 +40,10 @@ function gameLoop(timestamp) {
   lastTime = timestamp;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#228B22'; // Jungle background color
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Draw background
+  ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+
   ctx.fillStyle = 'green'; // Ground color
   ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
 
