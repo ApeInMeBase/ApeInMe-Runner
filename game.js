@@ -7,15 +7,18 @@ let lastTime = 0, lastSnakeTime = 0, lastBananaTime = 0;
 
 // Base64 Image Data for Monkey (pixelated)
 const monkeyImg = new Image();
-monkeyImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARc...'; // (truncated for brevity)
+monkeyImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8...'; // full base64 string
+
 
 // Base64 Image Data for Banana (pixelated)
 const bananaImg = new Image();
-bananaImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQ0...'; // (truncated for brevity)
+bananaImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAg...'; // full base64 string
+
 
 // Base64 Image Data for Jungle Background
 const backgroundImg = new Image();
-backgroundImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARc...'; // (truncated for brevity)
+backgroundImg.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABAC...'; // full base64 string
+
 
 
 // Event listeners for jumping
