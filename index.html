@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jungle Monkey Runner</title>
+  <style>
+    body { margin: 0; padding: 0; background: #87ceeb; font-family: sans-serif; }
+    canvas { display: block; margin: 0 auto; background: #fff; border: 2px solid #000; }
+    .controls, .leaderboard { text-align: center; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <input id="playerName" placeholder="Enter your name" />
+    <button onclick="connectWallet()">Connect Wallet</button>
+    <button onclick="startGame()">Start Game</button>
+  </div>
+  <canvas id="gameCanvas" width="600" height="300"></canvas>
+  <div class="leaderboard">
+    <p id="score">Score: 0</p>
+    <h3>Leaderboard</h3>
+    <ul id="leaderboardList"></ul>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
