@@ -1,26 +1,28 @@
-
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 let monkeyY = 150, velocity = 0, gravity = 0.6, jump = -12;
-let score = 0, running = false, walletConnected = false;
-let obstacles = [], highScores = [], playerName = '';
-let lastTime = 0, lastObstacleTime = 0;
+let score = 0, running = false, playerName = '';
+let snakes = [], bananas = [], highScores = [];
+let lastTime = 0, lastSnakeTime = 0, lastBananaTime = 0;
 
+const monkeyImg = new Image();
+monkeyImg.src = 'https://path-to-your-pixel-monkey-image.png'; // Replace with your actual pixel monkey image URL
+const bananaImg = new Image();
+bananaImg.src = 'https://path-to-your-banana-image.png'; // Replace with your actual banana image URL
+
+// Event listeners for jumping
 document.addEventListener('keydown', () => velocity = jump);
 canvas.addEventListener('click', () => velocity = jump);
-
-function connectWallet() {
-  walletConnected = true;
-  alert('Wallet connected! (Simulated)');
-}
 
 function startGame() {
   score = 0;
   monkeyY = 150;
   velocity = 0;
   running = true;
-  obstacles = [];
-  lastObstacleTime = 0;
+  snakes = [];
+  bananas = [];
+  lastSnakeTime = 0;
+  lastBananaTime = 0;
   playerName = document.getElementById('playerName').value || 'Anon';
   requestAnimationFrame(gameLoop);
 }
@@ -31,39 +33,69 @@ function gameLoop(timestamp) {
   lastTime = timestamp;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#87ceeb';
+  ctx.fillStyle = '#228B22'; // Jungle background color
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = 'green';
+  ctx.fillStyle = 'green'; // Ground color
   ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
 
+  // Apply gravity and movement for the monkey
   velocity += gravity;
   monkeyY += velocity;
   if (monkeyY > canvas.height - 100) { monkeyY = canvas.height - 100; velocity = 0; }
-  ctx.fillStyle = 'brown';
-  ctx.fillRect(50, monkeyY, 30, 30);
 
-  if (timestamp - lastObstacleTime > 1500) {
-    obstacles.push({ x: canvas.width, width: 20, height: 50 });
-    lastObstacleTime = timestamp;
+  // Draw pixel monkey
+  ctx.drawImage(monkeyImg, 50, monkeyY, 30, 30); // Use the pixel monkey image
+
+  // Create snakes (obstacles)
+  if (timestamp - lastSnakeTime > 1500) {
+    snakes.push({ x: canvas.width, width: 20, height: 30 });
+    lastSnakeTime = timestamp;
   }
 
-  obstacles = obstacles.map(obs => {
-    obs.x -= 6;
-    ctx.fillStyle = 'darkgreen';
-    ctx.fillRect(obs.x, canvas.height - obs.height - 50, obs.width, obs.height);
-    return obs;
-  }).filter(obs => obs.x + obs.width > 0);
+  // Create bananas
+  if (timestamp - lastBananaTime > 2000) {
+    bananas.push({ x: canvas.width, y: Math.random() * (canvas.height - 100), width: 20, height: 20 });
+    lastBananaTime = timestamp;
+  }
 
-  for (let obs of obstacles) {
-    if (50 < obs.x + obs.width && 80 > obs.x && monkeyY + 30 > canvas.height - obs.height - 50) {
+  // Move snakes and check for collisions
+  snakes = snakes.map(snake => {
+    snake.x -= 6;
+    ctx.fillStyle = 'darkgreen'; // Snake color
+    ctx.fillRect(snake.x, canvas.height - snake.height - 50, snake.width, snake.height);
+    return snake;
+  }).filter(snake => snake.x + snake.width > 0);
+
+  // Move bananas and check for collisions
+  bananas = bananas.map(banana => {
+    banana.x -= 4;
+    ctx.drawImage(bananaImg, banana.x, banana.y, banana.width, banana.height);
+    return banana;
+  }).filter(banana => banana.x + banana.width > 0);
+
+  // Check for collisions with snakes
+  for (let snake of snakes) {
+    if (50 < snake.x + snake.width && 80 > snake.x && monkeyY + 30 > canvas.height - snake.height - 50) {
       running = false;
       highScores.push({ name: playerName, score });
+      highScores = [...new Set(highScores.map(a => a.name))].map(name => highScores.find(a => a.name === name)); // Only record player once
       highScores.sort((a, b) => b.score - a.score);
       updateLeaderboard();
       return;
     }
   }
 
+  // Check for collecting bananas
+  for (let i = 0; i < bananas.length; i++) {
+    let banana = bananas[i];
+    if (50 < banana.x + banana.width && 80 > banana.x && monkeyY < banana.y + banana.height && monkeyY + 30 > banana.y) {
+      bananas.splice(i, 1);  // Remove banana from array
+      score += 5;  // Add score for collecting a banana
+      break;
+    }
+  }
+
+  // Increment score and update display
   score++;
   document.getElementById('score').textContent = 'Score: ' + score;
   requestAnimationFrame(gameLoop);
